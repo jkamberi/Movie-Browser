@@ -9,13 +9,19 @@ protected:
 	float height;
 	float pos_x;
 	float pos_y;
+	bool hovered = false;
 public:	
+	void draw();
+	void update();
+
 	void set_w(float w) { width = w; }
 	void set_h(float h) { height = h; }
 	void set_pos(float x, float y) { pos_x = x; pos_y = y; }
-	virtual void draw();
 
-	Widget(float w = 35.f, float h = 35.f, float posx = WINDOW_WI/2, float posy = WINDOW_HE/2) : width(w), height(h), pos_x(posx), pos_y(posy) {}
+	virtual void setHovered(bool h) { hovered = h; }
+	bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < P_WIDTH/2); }
+
+	Widget(float w = 35.f, float h = 35.f, float posx = CANVAS_WI/2, float posy = CANVAS_HE/2) : width(w), height(h), pos_x(posx), pos_y(posy) {}
 
 	~Widget();
 };
@@ -25,11 +31,15 @@ class Button : public Widget
 private:
 	std::string label;
 public:
+	void draw();
 	void set_label(const std::string& l) { label = l; }
 	void set_pos(float x, float y) { Widget::set_pos(x, y); }
+
 	void button_pressed();
-	void draw();
-	Button() { width = 80; height = 35; pos_x = WINDOW_WI / 2; pos_y = WINDOW_HE / 2; label = "Button"; }
+	void setHovered(bool h) { Widget::setHovered(h); }
+	bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < height/2); }
+
+	Button() { width = 80; height = 35; pos_x = CANVAS_WI / 2; pos_y = CANVAS_HE / 2; label = "Button"; }
 
 	Button(float w, float h, float posx, float posy, const std::string& l) : label(l) { width = w; height = h; pos_x = posx; pos_y = posy; }
 
@@ -40,9 +50,13 @@ class MovieWindow : public Widget
 {
 private:
 	Movie movie;
+	bool sel = false;
 public:
-	void pressed();
 	void draw();
+
+	void selected(bool s) { sel = s; }
+	void setHovered(bool h) { Widget::setHovered(h); }
+	bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < P_WIDTH/2); }
 
 	MovieWindow(float w, float h, float posx, float posy, Movie m) : movie(m) { width = w; height = h; pos_x = posx; pos_y = posy; }
 

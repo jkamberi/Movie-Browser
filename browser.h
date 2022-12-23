@@ -7,10 +7,11 @@ class Browser
 private:
 	Widget* widget;
 	Button* button;
-	Movie* lostHighway;
-	MovieWindow* mwindow;
+	MovieWindow* mwindow = nullptr;
 
 	Button* button_menu[7];
+	MovieWindow* movieWindows[6];
+
 public:
 	void update();
 	void draw();

@@ -27,7 +27,7 @@ int main()
     graphics::setDrawFunction(draw);
     graphics::setUpdateFunction(update);
 
-    graphics::setCanvasSize(WINDOW_WI, WINDOW_HE);
+    graphics::setCanvasSize(CANVAS_WI, CANVAS_HE);
     graphics::setCanvasScaleMode(graphics::CANVAS_SCALE_FIT);
 
     graphics::startMessageLoop();

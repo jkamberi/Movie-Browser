@@ -12,6 +12,10 @@ void Widget::draw()
 	graphics::drawRect(pos_x, pos_y, width, height, br);
 }
 
+void Widget::update()
+{
+}
+
 Widget::~Widget()
 {
 }
@@ -25,8 +29,10 @@ void Button::draw()
 {
 	graphics::Brush br;
 
+	float hov = 1.0f * hovered;
+
 	SETCOLOR(br.fill_color, 0.2f, 0.2f, 0.2f);
-	SETCOLOR(br.outline_color, 0.5f, 0.5f, 0.5f);
+	SETCOLOR(br.outline_color, (hov * 0.5f)+0.5f, (hov * 0.5f)+0.5f, (hov * 0.5f)+0.5f);
 	br.outline_opacity = 1.f;
 
 	graphics::drawRect(pos_x, pos_y, width, height, br);
@@ -44,17 +50,17 @@ Button::~Button()
 }
 
 
-void MovieWindow::pressed()
-{
-}
-
 void MovieWindow::draw()
 {
 	graphics::Brush br;
 
+	float hov = 1.0f * hovered;
+
+
 	br.texture = ASSET_PATH + std::string(movie.getPoster());
-	SETCOLOR(br.outline_color, 0.3f, 0.3f, 0.3f);
+	SETCOLOR(br.outline_color, (hov * 0.2f)+(sel * 0.2f)+0.3f, (hov * 0.2f)+(sel * 0.2f)+0.3f, (hov * 0.2f)+(sel * 0.2f)+0.3f);
 	br.outline_opacity = 1.f;
+	br.outline_width = 1 + 0.8f * sel;
 
 	graphics::drawRect(pos_x, pos_y, width, height, br);
 }
