@@ -31,10 +31,13 @@ void Button::draw()
 
 	float hov = 1.0f * hovered;
 
-	SETCOLOR(br.fill_color, 0.2f, 0.2f, 0.2f);
-	SETCOLOR(br.outline_color, (hov * 0.5f)+0.5f, (hov * 0.5f)+0.5f, (hov * 0.5f)+0.5f);
-	br.outline_opacity = 1.f;
+	
+	br.texture = ASSET_PATH + std::string(ic);
 
+	SETCOLOR(br.outline_color, 0.3f-(hov * 0.3f), 0.3f-(hov * 0.3f), 0.3f-(hov * 0.3f));
+	br.outline_opacity = 0.8f;
+	br.outline_width = 2.5f;
+	
 	graphics::drawRect(pos_x, pos_y, width, height, br);
 
 	graphics::Brush text;
@@ -56,7 +59,6 @@ void MovieWindow::draw()
 
 	float hov = 1.0f * hovered;
 
-
 	br.texture = ASSET_PATH + std::string(movie.getPoster());
 	SETCOLOR(br.outline_color, (hov * 0.2f)+(sel * 0.2f)+0.3f, (hov * 0.2f)+(sel * 0.2f)+0.3f, (hov * 0.2f)+(sel * 0.2f)+0.3f);
 	br.outline_opacity = 1.f;
@@ -67,4 +69,27 @@ void MovieWindow::draw()
 
 MovieWindow::~MovieWindow()
 {
+}
+
+
+void Description::draw()
+{
+	graphics::Brush br;
+
+	SETCOLOR(br.fill_color, 0.03f, 0.03f, 0.03f);
+	SETCOLOR(br.outline_color, 0.2f, 0, 0);
+	br.outline_opacity = 0.5f;
+	br.outline_width = 3.f;
+
+	graphics::drawRect(CANVAS_WI/2 + 90, CANVAS_HE/2 + 230, CANVAS_WI - 200, CANVAS_HE/2 - 50, br);
+
+
+	graphics::Brush d;
+
+	//d.texture = ASSET_PATH + std::string(movie.getPoster());
+	SETCOLOR(d.fill_color, 0, 0, 0.5f);
+	SETCOLOR(d.outline_color, 0.3f, 0.3f, 0.3f);
+	d.outline_opacity = 1.f;
+
+	graphics::drawRect(CANVAS_WI / 2 - 470, CANVAS_HE / 2 + 230, P_WIDTH, P_HEIGHT, d);
 }
