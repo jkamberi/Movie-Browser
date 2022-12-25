@@ -53,7 +53,7 @@ public:
 
 class MovieWindow : public Widget
 {
-protected:
+private:
 	Movie movie;
 	bool sel = false;
 public:
@@ -67,18 +67,4 @@ public:
 	MovieWindow(float w, float h, float posx, float posy, Movie m) : movie(m) { width = w; height = h; pos_x = posx; pos_y = posy; }
 
 	~MovieWindow();
-};
-
-
-class Description : public Widget
-{
-	Movie movie;
-	bool active = false;
-public:
-	void draw();
-	void setActive(bool a) { active = a; }
-
-	Description(Movie m) : movie(m) {}
-
-	~Description() {}
 };

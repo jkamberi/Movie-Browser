@@ -8,14 +8,13 @@ public:
 	enum brower_state { STATE_ILDE, STATE_PREVIEW, STATE_SEARCHING };
 protected:
 	Widget* widget;
-	Button* button;
-
-	Description* desc = nullptr;
+	Button* search_button;
 
 	MovieWindow* mwindow = nullptr;
 	MovieWindow* selectedw = nullptr;
 
 	Button* button_menu[7];
+	Movie* movies[6];
 	MovieWindow* movieWindows[6];
 
 	brower_state state = STATE_ILDE;
