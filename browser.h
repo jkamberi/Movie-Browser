@@ -9,6 +9,7 @@ public:
 protected:
 	Widget* widget;
 	Button* search_button;
+	Button* selected_b;
 
 	MovieWindow* mwindow = nullptr;
 	MovieWindow* selectedw = nullptr;
@@ -18,7 +19,7 @@ protected:
 	MovieWindow* movieWindows[6];
 
 	brower_state state = STATE_ILDE;
-	std::string statetxt = "STATE_IDLE";
+	std::string statetxt = "IDLE";
 public:
 	void update();
 	void draw();

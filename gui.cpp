@@ -21,16 +21,11 @@ Widget::~Widget()
 }
 
 
-void Button::button_pressed()
-{
-}
-
 void Button::draw()
 {
 	graphics::Brush br;
 
 	float hov = 1.0f * hovered;
-
 	
 	br.texture = ASSET_PATH + std::string(ic);
 

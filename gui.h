@@ -16,7 +16,7 @@ public:
 
 	void set_w(float w) { width = w; }
 	void set_h(float h) { height = h; }
-	void set_pos(float x, float y) { pos_x = x; pos_y = y; }
+	virtual void set_pos(float x, float y) { pos_x = x; pos_y = y; }
 
 	virtual void setHovered(bool h) { hovered = h; }
 	bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < P_WIDTH/2); }
@@ -34,16 +34,15 @@ private:
 	std::string ic = "";
 public:
 	void draw();
-	void set_label(const std::string& l) { label = l; }
 	void set_pos(float x, float y) { Widget::set_pos(x, y); }
+	void setIcon(std::string i) { ic = i; }
 
-	void button_pressed();
 	void setHovered(bool h) { Widget::setHovered(h); }
 	bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < height/2); }
 
 	Button() { width = 80; height = 35; pos_x = CANVAS_WI / 2; pos_y = CANVAS_HE / 2; label = "Button"; }
 	
-	Button(std::string icon) { width = 40; height = 40; pos_x = 50; pos_y = CANVAS_HE / 2; ic = icon; }
+	Button(std::string icon) { width = 48; height = 48; pos_x = 50; pos_y = CANVAS_HE / 2; ic = icon; }
 
 	Button(float w, float h, float posx, float posy, const std::string& l) : label(l) { width = w; height = h; pos_x = posx; pos_y = posy; }
 
@@ -62,7 +61,7 @@ public:
 	Movie getMovie() { return movie; }
 	void selected(bool s) { sel = s; }
 	void setHovered(bool h) { Widget::setHovered(h); }
-	bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < P_WIDTH/2); }
+	bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < P_WIDTH/2+5); }
 
 	MovieWindow(float w, float h, float posx, float posy, Movie m) : movie(m) { width = w; height = h; pos_x = posx; pos_y = posy; }
 
