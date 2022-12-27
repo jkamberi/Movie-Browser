@@ -7,16 +7,14 @@ class Browser
 public:
 	enum brower_state { STATE_ILDE, STATE_PREVIEW, STATE_SEARCHING };
 protected:
-	Widget* widget;
-	Button* search_button;
+	IconButton* search_button;
 	Button* selected_b;
+
+	Movie* movies[12];
+	MovieWindow* movieWindows[12];
 
 	MovieWindow* mwindow = nullptr;
 	MovieWindow* selectedw = nullptr;
-
-	Button* button_menu[7];
-	Movie* movies[6];
-	MovieWindow* movieWindows[6];
 
 	brower_state state = STATE_ILDE;
 	std::string statetxt = "IDLE";

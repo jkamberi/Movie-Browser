@@ -1,17 +1,6 @@
 #include "gui.h"
 #include "config.h"
 
-void Widget::draw()
-{
-	graphics::Brush br;
-
-	SETCOLOR(br.fill_color, 0, 0.3f, 0.3f);
-	SETCOLOR(br.outline_color, 0.0f, 0.1f, 0.1f);
-	br.outline_opacity = 1.f; 
-	
-	graphics::drawRect(pos_x, pos_y, width, height, br);
-}
-
 void Widget::update()
 {
 }
@@ -26,8 +15,6 @@ void Button::draw()
 	graphics::Brush br;
 
 	float hov = 1.0f * hovered;
-	
-	br.texture = ASSET_PATH + std::string(ic);
 
 	SETCOLOR(br.outline_color, 0.2f-(hov * 0.2f), 0.2f-(hov * 0.2f), 0.2f-(hov * 0.2f));
 	br.outline_opacity = 0.8f;
@@ -46,6 +33,27 @@ void Button::draw()
 Button::~Button()
 {
 }
+
+
+void IconButton::draw()
+{
+	graphics::Brush br;
+
+	float hov = 1.0f * hovered;
+
+	br.texture = ASSET_PATH + std::string(icon);
+
+	SETCOLOR(br.outline_color, 0.2f - (hov * 0.2f), 0.2f - (hov * 0.2f), 0.2f - (hov * 0.2f));
+	br.outline_opacity = 0.8f;
+	br.outline_width = 2.5f;
+
+	graphics::drawRect(pos_x, pos_y, width, height, br);
+}
+
+IconButton::~IconButton()
+{
+}
+
 
 
 void MovieWindow::draw()

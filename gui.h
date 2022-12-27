@@ -11,17 +11,11 @@ protected:
 	float pos_y;
 	bool hovered = false;
 public:	
-	void draw();
 	void update();
 
-	void set_w(float w) { width = w; }
-	void set_h(float h) { height = h; }
+	virtual void draw()=0;
 	virtual void set_pos(float x, float y) { pos_x = x; pos_y = y; }
-
 	virtual void setHovered(bool h) { hovered = h; }
-	bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < P_WIDTH/2); }
-
-	Widget(float w = 35.f, float h = 35.f, float posx = CANVAS_WI/2, float posy = CANVAS_HE/2) : width(w), height(h), pos_x(posx), pos_y(posy) {}
 
 	~Widget();
 };
@@ -31,22 +25,34 @@ class Button : public Widget
 {
 private:
 	std::string label;
-	std::string ic = "";
 public:
-	void draw();
-	void set_pos(float x, float y) { Widget::set_pos(x, y); }
-	void setIcon(std::string i) { ic = i; }
+	virtual void draw();
+	virtual bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < height / 2); }
 
+	void set_pos(float x, float y) { Widget::set_pos(x, y); }
 	void setHovered(bool h) { Widget::setHovered(h); }
-	bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < height/2); }
 
 	Button() { width = 80; height = 35; pos_x = CANVAS_WI / 2; pos_y = CANVAS_HE / 2; label = "Button"; }
-	
-	Button(std::string icon) { width = 48; height = 48; pos_x = 50; pos_y = CANVAS_HE / 2; ic = icon; }
-
 	Button(float w, float h, float posx, float posy, const std::string& l) : label(l) { width = w; height = h; pos_x = posx; pos_y = posy; }
 
 	~Button();
+};
+
+class IconButton : public Button
+{
+	std::string icon = "";
+public:
+	void draw();
+
+	void set_pos(float x, float y) { Widget::set_pos(x, y); }
+	void setIcon(std::string i) { icon = i; }
+	void setHovered(bool h) { Widget::setHovered(h); }
+
+	bool contains(float x, float y) { return Button::contains(x, y); }
+
+	IconButton(std::string ic) { width = 48; height = 48; pos_x = 50; pos_y = CANVAS_HE / 2; icon = ic; }
+
+	~IconButton();
 };
 
 
@@ -57,10 +63,10 @@ private:
 	bool sel = false;
 public:
 	void draw();
+	void setHovered(bool h) { Widget::setHovered(h); }
 
 	Movie getMovie() { return movie; }
 	void selected(bool s) { sel = s; }
-	void setHovered(bool h) { Widget::setHovered(h); }
 	bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < P_WIDTH/2+5); }
 
 	MovieWindow(float w, float h, float posx, float posy, Movie m) : movie(m) { width = w; height = h; pos_x = posx; pos_y = posy; }

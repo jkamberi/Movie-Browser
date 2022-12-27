@@ -84,16 +84,17 @@ void Browser::init()
 	//for (int i = 0; i < 7; i++)
 	//	button_menu[i] = new Button(80, 35, 75, (CANVAS_HE/2 - 175) + 50*i, "Button " + std::to_string(i+1));
 
-	search_button = new Button("arrow_forward.png");
+	search_button = new IconButton("arrow_forward.png");
 
 	// Movies initialization
-	movies[0] = new Movie("The Hunt (Jagten)", "Thomas Vinterberg", "Mads Mikkelsen, Thomas Bo Larsen, Annika Wedderkopp", "Drama", "2012", theHunt_desc, theHunt_desc2, "hunt.png");
-	for (int i = 1; i < 6; i++)
+	movies[0] = new Movie("The Hunt (Jagten)", "Thomas Vinterberg", "Mads Mikkelsen, Thomas Bo Larsen, Annika Wedderkopp", "Drama", "", "2012", theHunt_desc, theHunt_desc2, "hunt.png");
+	for (int i = 1; i < 13; i++)
 		movies[i] = new Movie();
 
 	// Movie Window Initialization
 	for (int i = 0; i < 6; i++) {
-		movieWindows[i] = new MovieWindow(P_WIDTH, P_HEIGHT, INIT_POS_X + 50 + (i)* (P_WIDTH + 20), INIT_POS_Y, *movies[i]);
+		movieWindows[i] = new MovieWindow(P_WIDTH, P_HEIGHT, INIT_POS_X + 50 + (i) * (P_WIDTH + 20), INIT_POS_Y, *movies[i]);
+		movieWindows[i+6] = new MovieWindow(P_WIDTH, P_HEIGHT, INIT_POS_X + 50 + (i)* (P_WIDTH + 20), INIT_POS_Y + P_HEIGHT + 50, *movies[i+6]);
 	}
 	 
 
@@ -131,10 +132,14 @@ void Browser::draw()
 		// Draw background
 		graphics::Brush br;
 
-		SETCOLOR(br.fill_color, 0.07f, 0.07f, 0.07f);
+		SETCOLOR(br.fill_color, 0.05f, 0.05f, 0.05f);
 		SETCOLOR(br.outline_color, 0.2f, 0.2f, 0.2f);
+		SETCOLOR(br.fill_secondary_color, 0.2f, 0.f, 0.f);
 		br.outline_opacity = 0.5f;
 		br.outline_width = 3.f;
+		br.gradient = true;
+		br.gradient_dir_u = .4f;
+		br.gradient_dir_v = 0.f;
 
 		graphics::drawRect(CANVAS_WI / 2 + 90, CANVAS_HE / 2 + 230, CANVAS_WI - 200, CANVAS_HE / 2 - 50, br);
 
@@ -164,7 +169,12 @@ void Browser::draw()
 
 		// Draw genre
 		graphics::setFont("RobotoSlab-Regular.ttf");
-		graphics::drawText(CANVAS_WI / 2 - 150, CANVAS_HE / 2 + 99, 17.f, mwindow->getMovie().getGenre(), text);
+		graphics::drawText(CANVAS_WI / 2 - 150, CANVAS_HE / 2 + 99, 17.f, mwindow->getMovie().getGenre1(), text);
+		if (mwindow->getMovie().getGenre2() != "")
+		{
+			graphics::drawRect(CANVAS_WI / 2 - 50, CANVAS_HE / 2 + 93, 70, 30, ge);
+			graphics::drawText(CANVAS_WI / 2 - 75, CANVAS_HE / 2 + 99, 17.f, mwindow->getMovie().getGenre2(), text);
+		}
 
 		// Draw the movie Title
 		graphics::drawText(CANVAS_WI / 2 - 350, CANVAS_HE / 2 + 100, 20.f, mwindow->getMovie().getName(), text);
@@ -197,7 +207,7 @@ void Browser::draw()
 		// Drawing the search menu
 		graphics::Brush br;
 
-		SETCOLOR(br.fill_color, 0.f, 0.f, 0.15f);
+		SETCOLOR(br.fill_color, 0.1f, 0.f, 0.f);
 		SETCOLOR(br.fill_secondary_color, 0.02f, 0.02f, 0.02f);
 		SETCOLOR(br.outline_color, 0.1f, 0.1f, 0.1f);
 		br.outline_opacity = 3;
@@ -218,5 +228,5 @@ void Browser::draw()
 
 Browser::~Browser()
 {
-	for (auto b : button_menu) delete b;
+	
 }
