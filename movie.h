@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+// Here are stored all the movie properties and information
 class Movie 
 {
 	std::string name, director, stars, genre1, genre2, year, description, description2, poster;

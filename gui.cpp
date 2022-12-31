@@ -16,18 +16,23 @@ void Button::draw()
 
 	float hov = 1.0f * hovered;
 
-	SETCOLOR(br.outline_color, 0.2f-(hov * 0.2f), 0.2f-(hov * 0.2f), 0.2f-(hov * 0.2f));
-	br.outline_opacity = 0.8f;
-	br.outline_width = 2.5f;
+	SETCOLOR(br.fill_color, 0.05f+hov/2, 0.05f+hov/2, 0.05f+hov/2);
+	br.outline_opacity = 0.f;
+	br.outline_width = 0.f;
 	
 	graphics::drawRect(pos_x, pos_y, width, height, br);
 
+	if (clicked) {
+		SETCOLOR(br.fill_color, 0.5f, 0, 0);
+		graphics::drawRect(pos_x, pos_y + 11, 15, 3, br);
+	}
+
 	graphics::Brush text;
 	text.outline_opacity = 0;
-	SETCOLOR(text.fill_color, 1, 1, 1);
+	SETCOLOR(text.fill_color, 0.7f, 0.7f, 0.7f);
 
-	graphics::setFont("FiraSans-Regular.ttf");
-	graphics::drawText(pos_x - width/3, pos_y + height/4, 17.f, label, text);
+	graphics::setFont("KeepCalm-Medium.ttf");
+	graphics::drawText(pos_x - width/3 + 3, pos_y + height/4, 15.f, label, text);
 }
 
 Button::~Button()
@@ -55,7 +60,6 @@ IconButton::~IconButton()
 }
 
 
-
 void MovieWindow::draw()
 {
 	graphics::Brush br;
@@ -71,5 +75,13 @@ void MovieWindow::draw()
 }
 
 MovieWindow::~MovieWindow()
+{
+}
+
+void TextField::draw()
+{
+}
+
+TextField::~TextField()
 {
 }
