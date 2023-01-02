@@ -17,8 +17,8 @@ void Button::draw()
 	float hov = 1.0f * hovered;
 
 	SETCOLOR(br.fill_color, 0.05f+hov/2, 0.05f+hov/2, 0.05f+hov/2);
-	br.outline_opacity = 0.f;
-	br.outline_width = 0.f;
+	br.outline_opacity = 1.f;
+	br.outline_width = 1.f;
 	
 	graphics::drawRect(pos_x, pos_y, width, height, br);
 
@@ -29,10 +29,10 @@ void Button::draw()
 
 	graphics::Brush text;
 	text.outline_opacity = 0;
-	SETCOLOR(text.fill_color, 0.7f, 0.7f, 0.7f);
+	SETCOLOR(text.fill_color, 0.9f, 0.9f, 0.9f);
 
 	graphics::setFont("KeepCalm-Medium.ttf");
-	graphics::drawText(pos_x - width/3 + 3, pos_y + height/4, 15.f, label, text);
+	graphics::drawText(pos_x - width/3, pos_y + height/4, 13.f, label, text);
 }
 
 Button::~Button()

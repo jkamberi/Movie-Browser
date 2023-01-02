@@ -11,7 +11,9 @@ protected:
 	IconButton* search_button;
 	Button* selected_b1;
 
-	Movie* movies[15];
+	Button* genreButtons[5];
+
+	Movie* movies[12];
 	std::list<MovieWindow*> movieWindows;
 
 	MovieWindow* mwindow = nullptr;
@@ -19,6 +21,8 @@ protected:
 
 	brower_state state = STATE_ILDE;
 	std::string statetxt = "IDLE";
+
+	float text_size = 17.0f;
 public:
 	void update();
 	void draw();
