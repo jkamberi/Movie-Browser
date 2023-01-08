@@ -11,13 +11,9 @@ protected:
 	float pos_y;
 	bool hovered = false;
 public:	
-	void update();
-
 	virtual void draw()=0;
 	virtual void set_pos(float x, float y) { pos_x = x; pos_y = y; }
 	virtual void setHovered(bool h) { hovered = h; }
-
-	~Widget();
 };
 
 
@@ -36,6 +32,8 @@ public:
 	void setClicked(bool cl) { clicked = cl; }
 	bool isClicked() { return clicked; }
 
+	std::string getLabel() { return label; }
+
 	Button() { width = 80; height = 35; pos_x = WINDOW_WI / 2; pos_y = WINDOW_HE / 2; label = "Button"; }
 	Button(float w, float h, float posx, float posy, std::string l) : label(l) { width = w; height = h; pos_x = posx; pos_y = posy; }
 
@@ -46,7 +44,7 @@ class IconButton : public Button
 {
 	std::string icon = "";
 public:
-	void draw();
+	void draw() override;
 
 	void set_pos(float x, float y) { Widget::set_pos(x, y); }
 	void setHovered(bool h) { Widget::setHovered(h); }
@@ -66,12 +64,12 @@ private:
 	Movie movie;
 	bool sel = false;
 public:
-	void draw();
+	void draw() override;
 	void setHovered(bool h) { Widget::setHovered(h); }
 
 	Movie getMovie() { return movie; }
 	void selected(bool s) { sel = s; }
-	bool contains(float x, float y) { return distance(x, y, pos_x, pos_y) < P_WIDTH / 2 + 5; }
+	bool contains(float x, float y) { return distance(x, y, pos_x, pos_y) < width / 2 + 5; }
 
 	MovieWindow(float w, float h, float posx, float posy, Movie m) : movie(m) { width = w; height = h; pos_x = posx; pos_y = posy; }
 
@@ -81,17 +79,20 @@ public:
 
 class TextField : public Widget
 {
-	bool sel;
-	std::string text;
+	bool sel = false;
+	std::string textl;
 public:
-	void draw();
+	void draw() override;
+	void update();
+	void setHovered(bool h) { Widget::setHovered(h); }
 
 	void selected(bool s) { sel = s; }
-	bool contains(float x, float y) { return distance(x, y, pos_x, pos_y) < P_WIDTH / 2 + 5; }
+	bool isSelected() { return sel; }
+	bool contains(float x, float y) { return distance(x, y, pos_x, pos_y) < width / 4 + 5; }
 
-	std::string getText() { return text; }
+	std::string getText() { return textl; }
 
-	TextField() {}
+	TextField(float w, float h, float posx, float posy, std::string txt) : textl(txt) { width = w; height = h; pos_x = posx; pos_y = posy; }
 
 	~TextField();
 };
