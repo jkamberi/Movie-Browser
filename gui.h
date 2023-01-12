@@ -24,7 +24,7 @@ private:
 	bool clicked = false;
 public:
 	virtual void draw();
-	virtual bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y+height/2) < height/2); }
+	virtual bool contains(float x, float y) { return (distance(x, y, pos_x, pos_y) < height/1.5); }
 
 	void set_pos(float x, float y) { Widget::set_pos(x, y); }
 	void setHovered(bool h) { Widget::setHovered(h); }
@@ -36,8 +36,6 @@ public:
 
 	Button() { width = 80; height = 35; pos_x = WINDOW_WI / 2; pos_y = WINDOW_HE / 2; label = "Button"; }
 	Button(float w, float h, float posx, float posy, std::string l) : label(l) { width = w; height = h; pos_x = posx; pos_y = posy; }
-
-	~Button();
 };
 
 class IconButton : public Button
@@ -53,8 +51,6 @@ public:
 	void setIcon(std::string i) { icon = i; }
 
 	IconButton(std::string ic) { width = 48; height = 48; pos_x = 50; pos_y = WINDOW_HE / 2; icon = ic; }
-
-	~IconButton();
 };
 
 
@@ -72,8 +68,6 @@ public:
 	bool contains(float x, float y) { return distance(x, y, pos_x, pos_y) < width / 2 + 5; }
 
 	MovieWindow(float w, float h, float posx, float posy, Movie m) : movie(m) { width = w; height = h; pos_x = posx; pos_y = posy; }
-
-	~MovieWindow();
 };
 
 
@@ -93,6 +87,4 @@ public:
 	std::string getText() { return textl; }
 
 	TextField(float w, float h, float posx, float posy, std::string txt) : textl(txt) { width = w; height = h; pos_x = posx; pos_y = posy; }
-
-	~TextField();
 };

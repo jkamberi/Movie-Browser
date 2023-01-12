@@ -13,6 +13,10 @@ protected:
 
 	Button* genreButtons[9];
 
+	Button* yearButton;
+
+	Button* yearButtons[11];
+
 	Movie* movies[12];
 	std::list<MovieWindow*> movieWindows;
 

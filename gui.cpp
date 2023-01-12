@@ -26,10 +26,6 @@ void Button::draw()
 	graphics::drawText(pos_x - width/3, pos_y + height/4, 13.f, label, text);
 }
 
-Button::~Button()
-{
-}
-
 
 void IconButton::draw()
 {
@@ -44,10 +40,6 @@ void IconButton::draw()
 	br.outline_width = 2.5f;
 
 	graphics::drawRect(pos_x, pos_y, width, height, br);
-}
-
-IconButton::~IconButton()
-{
 }
 
 
@@ -65,9 +57,6 @@ void MovieWindow::draw()
 	graphics::drawRect(pos_x, pos_y, width, height, br);
 }
 
-MovieWindow::~MovieWindow()
-{
-}
 
 void TextField::draw()
 {
@@ -97,6 +86,7 @@ void TextField::draw()
 
 }
 
+
 void TextField::update()
 {
 	static float delay = 0.f;
@@ -116,8 +106,4 @@ void TextField::update()
 			}
 		}
 	}
-}
-
-TextField::~TextField()
-{
 }

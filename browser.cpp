@@ -6,7 +6,6 @@
 
 void Browser::update()
 {
-
 	graphics::MouseState ms;
 	graphics::getMouseState(ms);
 
@@ -88,6 +87,11 @@ void Browser::update()
 			gb->setClicked(false);
 	}
 
+	if (yearButton->contains(mx, my))
+		yearButton->setHovered(true);
+	else
+		yearButton->setHovered(false);
+
 
 	// TextField
 	txtf->update();
@@ -105,7 +109,6 @@ void Browser::update()
 	}
 	else if (ms.button_left_pressed && state == STATE_SEARCHING && txtf->isSelected())
 		txtf->selected(false);
-
 
 }
 
@@ -142,6 +145,20 @@ void Browser::init()
 	genreButtons[7] = new Button(70, 30, 190, 200, "Sci-Fi");
 	genreButtons[8] = new Button(85, 30, 280, 200, "Romance");
 
+	yearButton = new Button(70, 30, 140, 280, "Select...");
+
+	yearButtons[0] = new Button(70, 30, 140, 310, "1997");
+	yearButtons[1] = new Button(70, 30, 140, 340, "1999");
+	yearButtons[2] = new Button(70, 30, 140, 370, "2006");
+	yearButtons[3] = new Button(70, 30, 140, 400, "2008");
+	yearButtons[4] = new Button(70, 30, 140, 430, "2009");
+	yearButtons[5] = new Button(70, 30, 140, 460, "2010");
+	yearButtons[6] = new Button(70, 30, 140, 490, "2012");
+	yearButtons[7] = new Button(70, 30, 140, 520, "2013");
+	yearButtons[8] = new Button(70, 30, 140, 550, "2014");
+	yearButtons[9] = new Button(70, 30, 140, 580, "2019");
+	yearButtons[10] = new Button(70, 30, 140, 610, "2022");
+
 	// Movies Initialization
 	movies[0] = new Movie("The Hunt (Jagten)", "Thomas Vinterberg", "Mads Mikkelsen, Thomas Bo Larsen, Annika Wedderkopp", "Drama", "", "2012", theHunt_desc, theHunt_desc2, "hunt.png");
 	movies[1] = new Movie("Top Gun: Maverick", "Joseph Kosinski", "Tom Cruise, Jennifer Connelly, Miles Teller", "Action", "Drama", "2022", topGun_desc, topGun_desc2, "topgun.png");
@@ -165,7 +182,7 @@ void Browser::init()
 	}
 
 	// Text Field Initialization
-	txtf = new TextField(150, 30, 100, WINDOW_HE / 2 + 300, "o");
+	txtf = new TextField(150, 30, 100, WINDOW_HE / 2 + 300, " ");
 }
 
 void Browser::draw()
@@ -315,9 +332,15 @@ void Browser::draw()
 
 		graphics::setFont(ASSET_PATH + std::string("KeepCalm-Medium.ttf"));
 		graphics::drawText(20, 60, 17.f, "Genre:", text);
+		graphics::drawText(20, 280, 17.f, "Year:", text);
 
 		for (auto gb : genreButtons)
 			gb->draw();
+
+		yearButton->draw();
+
+		for (auto yb : yearButtons)
+			yb->draw();
 
 		txtf->draw();
 	}
@@ -333,6 +356,12 @@ void Browser::draw()
 
 Browser::~Browser()
 {
+	for (auto gb : genreButtons)
+		delete gb;
+
+	for (auto m : movies)
+		delete m;
+
 	for (auto mw : movieWindows)
 		delete mw;
 
