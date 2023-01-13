@@ -74,7 +74,7 @@ public:
 class TextField : public Widget
 {
 	bool sel = false;
-	std::string textl;
+	std::string entered_text;
 public:
 	void draw() override;
 	void update();
@@ -84,7 +84,7 @@ public:
 	bool isSelected() { return sel; }
 	bool contains(float x, float y) { return distance(x, y, pos_x, pos_y) < width / 4 + 5; }
 
-	std::string getText() { return textl; }
+	std::string getText() { return entered_text; }
 
-	TextField(float w, float h, float posx, float posy, std::string txt) : textl(txt) { width = w; height = h; pos_x = posx; pos_y = posy; }
+	TextField(float w, float h, float posx, float posy, std::string txt) : entered_text(txt) { width = w; height = h; pos_x = posx; pos_y = posy; }
 };

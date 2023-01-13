@@ -3,6 +3,7 @@
 #include "graphics.h"
 #include "config.h"
 #include <iostream>
+#include <locale>
 
 void Browser::update()
 {
@@ -11,6 +12,8 @@ void Browser::update()
 
 	float mx = graphics::windowToCanvasX(ms.cur_pos_x);
 	float my = graphics::windowToCanvasX(ms.cur_pos_y);
+
+	// Movie Windows
 
 	// Selecting a Movie and on-click events
 	// When we select a movie the description of the movie is shown in the botton of the screen
@@ -33,7 +36,7 @@ void Browser::update()
 		state = STATE_ILDE;
 		statetxt = "IDLE";
 	} 
-	else if (ms.button_left_pressed && selectedw && selectedw->contains(mx, my) && (state == STATE_ILDE || state == STATE_FILTERED)) // the first time we select a movie
+	else if (ms.button_left_pressed && selectedw && selectedw->contains(mx, my) && (state == STATE_ILDE || state == STATE_FILTERED || state == STATE_TYPING)) // the first time we select a movie
 	{
 		mwindow = selectedw;
 		mwindow->selected(true);
@@ -45,6 +48,8 @@ void Browser::update()
 				m->selected(false);
 		}
 	} 
+
+	// Buttons
 
 	// Hovering Buttons and on-click events
 	// In this button we expand the searching menu
@@ -83,8 +88,10 @@ void Browser::update()
 			state = STATE_FILTERED;
 			statetxt = "FILTERED";
 		}
-		if (ms.button_left_pressed && gb->isClicked() && gb->contains(mx,my))
-			gb->setClicked(false);
+		//if (!gb->isClicked())
+		//	genre = "";
+		//if (ms.button_left_pressed && gb->isClicked() && gb->contains(mx,my))
+		//	gb->setClicked(false);
 	}
 
 	if (yearButton->contains(mx, my))
@@ -92,9 +99,62 @@ void Browser::update()
 	else
 		yearButton->setHovered(false);
 
+	if (ms.button_left_pressed && state == STATE_SEARCHING && yearButton->contains(mx, my))
+	{
+		yearButton->setClicked(true);
+		state = STATE_YEARS;
+		statetxt = "YEARS";
+	}
+
+	for (auto yb : yearButtons) {
+
+		if (yb->contains(mx, my))
+			yb->setHovered(true);
+		else
+			yb->setHovered(false);
+
+		if (ms.button_left_pressed && state == STATE_YEARS && yb->contains(mx, my)) {
+			yb->setClicked(true);
+			year = yb->getLabel();
+			state = STATE_FILTERED;
+			statetxt = "FILTERED";
+		}
+		//if (!yb->isClicked())
+		//	year = "";
+	}
+
+	if (txtButton->contains(mx, my))
+		txtButton->setHovered(true);
+	else
+		txtButton->setHovered(false);
+
+	if (ms.button_left_pressed && state == STATE_SEARCHING && txtButton->contains(mx, my))
+	{
+		txtButton->setClicked(true);
+		state = STATE_TYPING;
+		statetxt = "TYPING";
+	}
+
+	if (clearFilters->contains(mx, my))
+		clearFilters->setHovered(true);
+	else
+		clearFilters->setHovered(false);
+
+	if (ms.button_left_pressed && clearFilters->contains(mx, my))
+	{
+		state = STATE_ILDE;
+		statetxt = "IDLE";
+		clearFilters->setClicked(true);
+		for (auto gb : genreButtons)
+			gb->setClicked(false);
+		for (auto yb : yearButtons)
+			yb->setClicked(false);
+		yearButton->setClicked(false);
+	}
 
 	// TextField
-	txtf->update();
+	if (txtf->isSelected())
+		txtf->update();
 
 	if (txtf->contains(mx, my))
 		txtf->setHovered(true);
@@ -104,8 +164,6 @@ void Browser::update()
 	if (ms.button_left_pressed && state == STATE_SEARCHING && txtf->contains(mx, my)) 
 	{
 		txtf->selected(true);
-		//state = STATE_TYPING;
-		//statetxt = "TYPING";
 	}
 	else if (ms.button_left_pressed && state == STATE_SEARCHING && txtf->isSelected())
 		txtf->selected(false);
@@ -159,6 +217,10 @@ void Browser::init()
 	yearButtons[9] = new Button(70, 30, 140, 580, "2019");
 	yearButtons[10] = new Button(70, 30, 140, 610, "2022");
 
+	txtButton = new Button(60, 30, 300, WINDOW_HE / 2 + 250, "Search");
+
+	clearFilters = new Button(145, 30, WINDOW_WI - 130, 50, "CLEAR FILTERS");
+
 	// Movies Initialization
 	movies[0] = new Movie("The Hunt (Jagten)", "Thomas Vinterberg", "Mads Mikkelsen, Thomas Bo Larsen, Annika Wedderkopp", "Drama", "", "2012", theHunt_desc, theHunt_desc2, "hunt.png");
 	movies[1] = new Movie("Top Gun: Maverick", "Joseph Kosinski", "Tom Cruise, Jennifer Connelly, Miles Teller", "Action", "Drama", "2022", topGun_desc, topGun_desc2, "topgun.png");
@@ -182,7 +244,7 @@ void Browser::init()
 	}
 
 	// Text Field Initialization
-	txtf = new TextField(150, 30, 100, WINDOW_HE / 2 + 300, " ");
+	txtf = new TextField(200, 30, 150, WINDOW_HE / 2 + 250, "");
 }
 
 void Browser::draw()
@@ -213,8 +275,17 @@ void Browser::draw()
 	{
 		if (state == STATE_ILDE)
 			mw->draw();
-		else if (state == STATE_FILTERED && mw->getMovie().getGenre1() == genre || mw->getMovie().getGenre2() == genre)
+		else if (state == STATE_FILTERED && (mw->getMovie().getGenre1() == genre || mw->getMovie().getGenre2() == genre) || mw->getMovie().getYear() == year)
 			mw->draw();
+		else if (state == STATE_TYPING) {
+			std::string movie_name = mw->getMovie().getName();
+			std::locale loc;
+			for (auto& c : movie_name) {
+				c = std::tolower(c, loc);
+			}
+			if (movie_name.find(txtf->getText()) != std::string::npos)
+				mw->draw();
+		}
 	}
 
 
@@ -306,7 +377,7 @@ void Browser::draw()
 		graphics::drawText(WINDOW_WI / 2 - 350, WINDOW_HE / 2 + 370, 18.f, "Starring :    " + mwindow->getMovie().getCast(), text);
 	}
 
-	if (state == STATE_SEARCHING)
+	if (state == STATE_SEARCHING || state == STATE_YEARS)
 	{
 		// Changing the button position
 		search_button->set_pos(WINDOW_WI/3 - 40, WINDOW_HE / 2);
@@ -339,10 +410,8 @@ void Browser::draw()
 
 		yearButton->draw();
 
-		for (auto yb : yearButtons)
-			yb->draw();
-
 		txtf->draw();
+		txtButton->draw();
 	}
 	else
 	{
@@ -350,8 +419,12 @@ void Browser::draw()
 		search_button->setIcon("arrow_forward.png");
 	}
 
-	search_button->draw();
+	if (state == STATE_YEARS)
+		for (auto yb : yearButtons)
+			yb->draw();
 
+	search_button->draw();
+	clearFilters->draw();
 }
 
 Browser::~Browser()
