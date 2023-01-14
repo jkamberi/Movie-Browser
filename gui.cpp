@@ -83,7 +83,7 @@ void TextField::draw()
 	SETCOLOR(text.fill_color, 0.9f, 0.9f, 0.9f);
 
 	graphics::setFont(ASSET_PATH + std::string("FiraSans-Regular.ttf"));
-	graphics::drawText(pos_x - pos_x/2 - 15, pos_y + 8, 17.f, entered_text, text);
+	graphics::drawText(pos_x - pos_x/2 - 11, pos_y + 8, 17.f, entered_text, text);
 
 }
 
@@ -130,7 +130,6 @@ char scancode_to_char(int scancode) {
 
 		case graphics::SCANCODE_BACKSPACE: return '\b';
 		case graphics::SCANCODE_SPACE: return ' ';
-		//case graphics::SCANCODE_RETURN: return '\n';
 
 		default: return 0;
 	}

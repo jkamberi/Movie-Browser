@@ -6,7 +6,7 @@
 class Browser 
 {
 public:
-	enum brower_state { STATE_ILDE, STATE_PREVIEW, STATE_SEARCHING, STATE_FILTERED, STATE_TYPING, STATE_YEARS };
+	enum brower_state { STATE_ILDE, STATE_PREVIEW, STATE_SEARCHING, STATE_YEARS, STATE_FILTERED_by_GENRE, STATE_FILTERED_by_YEAR, STATE_FILTERED_by_TXT };
 protected:
 	IconButton* search_button;
 	Button* selected_b1;

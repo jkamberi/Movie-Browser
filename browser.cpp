@@ -34,14 +34,12 @@ void Browser::update()
 		selectedw = nullptr;
 		mwindow = nullptr;
 		state = STATE_ILDE;
-		statetxt = "IDLE";
 	} 
-	else if (ms.button_left_pressed && selectedw && selectedw->contains(mx, my) && (state == STATE_ILDE || state == STATE_FILTERED || state == STATE_TYPING)) // the first time we select a movie
+	else if (ms.button_left_pressed && selectedw && selectedw->contains(mx, my) && (state == STATE_ILDE || state == STATE_FILTERED_by_GENRE || state == STATE_FILTERED_by_YEAR || state == STATE_FILTERED_by_TXT)) // the first time we select a movie
 	{
 		mwindow = selectedw;
 		mwindow->selected(true);
 		state = STATE_PREVIEW;
-		statetxt = "PREVIEW";
 		for (auto m : movieWindows)
 		{
 			if (m != mwindow)
@@ -64,12 +62,11 @@ void Browser::update()
 	if (ms.button_left_pressed && state == STATE_SEARCHING && selected_b1->contains(mx, my)) 
 	{
 		state = STATE_ILDE;
-		statetxt = "IDLE";
 	}
 	else if (ms.button_left_pressed && selected_b1 && selected_b1->contains(mx, my))
 	{
 		state = STATE_SEARCHING;
-		statetxt = "SEARCHING";
+		txtf->emptyText();
 	}
 
 	for (auto gb : genreButtons)
@@ -85,13 +82,8 @@ void Browser::update()
 		if (ms.button_left_pressed && state == STATE_SEARCHING && gb->contains(mx, my)) {
 			gb->setClicked(true);
 			genre = gb->getLabel();
-			state = STATE_FILTERED;
-			statetxt = "FILTERED";
+			state = STATE_FILTERED_by_GENRE;
 		}
-		//if (!gb->isClicked())
-		//	genre = "";
-		//if (ms.button_left_pressed && gb->isClicked() && gb->contains(mx,my))
-		//	gb->setClicked(false);
 	}
 
 	if (yearButton->contains(mx, my))
@@ -99,11 +91,15 @@ void Browser::update()
 	else
 		yearButton->setHovered(false);
 
+	if (ms.button_left_pressed && yearButton->isClicked() && yearButton->contains(mx, my))
+	{
+		yearButton->setClicked(false);
+		state = STATE_SEARCHING;
+	}
 	if (ms.button_left_pressed && state == STATE_SEARCHING && yearButton->contains(mx, my))
 	{
 		yearButton->setClicked(true);
 		state = STATE_YEARS;
-		statetxt = "YEARS";
 	}
 
 	for (auto yb : yearButtons) {
@@ -116,11 +112,8 @@ void Browser::update()
 		if (ms.button_left_pressed && state == STATE_YEARS && yb->contains(mx, my)) {
 			yb->setClicked(true);
 			year = yb->getLabel();
-			state = STATE_FILTERED;
-			statetxt = "FILTERED";
+			state = STATE_FILTERED_by_YEAR;
 		}
-		//if (!yb->isClicked())
-		//	year = "";
 	}
 
 	if (txtButton->contains(mx, my))
@@ -131,8 +124,7 @@ void Browser::update()
 	if (ms.button_left_pressed && state == STATE_SEARCHING && txtButton->contains(mx, my))
 	{
 		txtButton->setClicked(true);
-		state = STATE_TYPING;
-		statetxt = "TYPING";
+		state = STATE_FILTERED_by_TXT;
 	}
 
 	if (clearFilters->contains(mx, my))
@@ -143,13 +135,12 @@ void Browser::update()
 	if (ms.button_left_pressed && clearFilters->contains(mx, my))
 	{
 		state = STATE_ILDE;
-		statetxt = "IDLE";
-		clearFilters->setClicked(true);
 		for (auto gb : genreButtons)
 			gb->setClicked(false);
 		for (auto yb : yearButtons)
 			yb->setClicked(false);
 		yearButton->setClicked(false);
+		txtButton->setClicked(false);
 	}
 
 	// TextField
@@ -185,7 +176,8 @@ void Browser::init()
 	std::string theuglytruth_desc = "An uptight television producer takes control of a morning show segment on modern relationships hosted by a misogynistic man.";
 	std::string knivesout_desc = "A detective investigates the death of the patriarch of an eccentric, combative family.";
 	std::string desc_300 = "King Leonidas of Sparta and a force of 300 men fight the Persians at Thermopylae in 480 B.C.";
-	std::string thewolfofwallstreet_desc = "Based on the true story of Jordan Belfort, from his rise to a wealthy stock-broker living the high life to his fall involving crime, corruption and the federal government.";
+	std::string thewolfofwallstreet_desc = "Based on the true story of Jordan Belfort, from his rise to a wealthy stock-broker living the high life to his fall involving crime, corruption";
+	std::string thewolfofwallstreet_desc2 = "and the federal government.";
 	std::string interstellar_desc = "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.";
 	std::string matrix_desc = "When a beautiful stranger leads computer hacker Neo to a forbidding underworld, he discovers";
 	std::string matrix_desc2 = "the shocking truth--the life he knows is the elaborate deception of an evil cyber-intelligence.";
@@ -203,7 +195,7 @@ void Browser::init()
 	genreButtons[7] = new Button(70, 30, 190, 200, "Sci-Fi");
 	genreButtons[8] = new Button(85, 30, 280, 200, "Romance");
 
-	yearButton = new Button(70, 30, 140, 280, "Select...");
+	yearButton = new Button(77, 30, 140, 280, "Select...");
 
 	yearButtons[0] = new Button(70, 30, 140, 310, "1997");
 	yearButtons[1] = new Button(70, 30, 140, 340, "1999");
@@ -217,7 +209,7 @@ void Browser::init()
 	yearButtons[9] = new Button(70, 30, 140, 580, "2019");
 	yearButtons[10] = new Button(70, 30, 140, 610, "2022");
 
-	txtButton = new Button(60, 30, 300, WINDOW_HE / 2 + 250, "Search");
+	txtButton = new Button(67, 30, 320, WINDOW_HE / 2 + 150, "Search");
 
 	clearFilters = new Button(145, 30, WINDOW_WI - 130, 50, "CLEAR FILTERS");
 
@@ -230,7 +222,7 @@ void Browser::init()
 	movies[5] = new Movie("The Ugly Truth", "Robert Luketic", "Katherine Heigl, Gerard Butler, Bree Turner", "Comedy", "Romance", "2009", theuglytruth_desc, "", "theuglytruth.png");
 	movies[6] = new Movie("Knives Out", "Rian Johnson", "Daniel Craig, Chris Evans, Ana de Armas", "Comedy", "Crime", "2019", knivesout_desc, "", "knivesout.png");
 	movies[7] = new Movie("300", "Zack Snyder", "Gerard Butler, Lena Headey, David Wenham", "Action", "Drama", "2006", desc_300, "", "300.png");
-	movies[8] = new Movie("The Wolf of Wall Street", "Martin Scorsese", "Leonardo DiCaprio, Johan Hill, Margot Robbie", "Biography", "Comedy", "2013", thewolfofwallstreet_desc, "", "thewolfofwallstreet.png");
+	movies[8] = new Movie("The Wolf of Wall Street", "Martin Scorsese", "Leonardo DiCaprio, Johan Hill, Margot Robbie", "Biography", "Comedy", "2013", thewolfofwallstreet_desc, thewolfofwallstreet_desc2, "thewolfofwallstreet.png");
 	movies[9] = new Movie("Lost Highway", "David Lynch", "Bill Pullman, Patricia Arquette, John Roselius", "Mystery", "Thriller", "1997", lostHighway_desc, "", "losthighway.png");
 	movies[10] = new Movie("Interstellar", "Christopher Nolan", "Matthew McConaughey, Anne Hathaway, Jessica Chastain", "Adventure", "Sci-Fi", "2014", interstellar_desc, "", "interstellar.png");
 	movies[11] = new Movie("The Matrix", "Wachowski Brothers", "Keanu Reeves, Lawrence Fishburne, Carrie-Anne Moss", "Action", "Sci-Fi", "1999", matrix_desc, matrix_desc2, "matrix.png");
@@ -244,7 +236,7 @@ void Browser::init()
 	}
 
 	// Text Field Initialization
-	txtf = new TextField(200, 30, 150, WINDOW_HE / 2 + 250, "");
+	txtf = new TextField(200, 30, 160, WINDOW_HE / 2 + 150, "");
 }
 
 void Browser::draw()
@@ -262,28 +254,30 @@ void Browser::draw()
 	graphics::drawRect(WINDOW_WI / 2, WINDOW_HE / 2, WINDOW_WI, WINDOW_HE, br);
 
 
-	graphics::Brush text;
-	text.outline_opacity = 0;
-	SETCOLOR(text.fill_color, 0.6f, 0.f, 0.f);
-
-	// delete at the end of the project
-	graphics::setFont(ASSET_PATH + std::string("KeepCalm-Medium.ttf"));
-	graphics::drawText(10, 30, 17.f, "Current State: " + statetxt, text);
-
 	// Draw Movie Windows with the movies
 	for (auto mw : movieWindows)
 	{
 		if (state == STATE_ILDE)
 			mw->draw();
-		else if (state == STATE_FILTERED && (mw->getMovie().getGenre1() == genre || mw->getMovie().getGenre2() == genre) || mw->getMovie().getYear() == year)
+		else if (state == STATE_FILTERED_by_GENRE && (mw->getMovie().getGenre1() == genre || mw->getMovie().getGenre2() == genre))
 			mw->draw();
-		else if (state == STATE_TYPING) {
+		else if (state == STATE_FILTERED_by_YEAR && mw->getMovie().getYear() == year)
+			mw->draw();
+		else if (state == STATE_FILTERED_by_TXT) {
 			std::string movie_name = mw->getMovie().getName();
+			std::string movie_dir = mw->getMovie().getDirector();
+			std::string movie_stars = mw->getMovie().getCast();
 			std::locale loc;
-			for (auto& c : movie_name) {
+			for (auto& a : movie_name) {
+				a = std::tolower(a, loc);
+			}
+			for (auto& b : movie_dir) {
+				b = std::tolower(b, loc);
+			}			
+			for (auto& c : movie_stars) {
 				c = std::tolower(c, loc);
 			}
-			if (movie_name.find(txtf->getText()) != std::string::npos)
+			if (movie_name.find(txtf->getText()) != std::string::npos || movie_dir.find(txtf->getText()) != std::string::npos || movie_stars.find(txtf->getText()) != std::string::npos)
 				mw->draw();
 		}
 	}
@@ -404,6 +398,7 @@ void Browser::draw()
 		graphics::setFont(ASSET_PATH + std::string("KeepCalm-Medium.ttf"));
 		graphics::drawText(20, 60, 17.f, "Genre:", text);
 		graphics::drawText(20, 280, 17.f, "Year:", text);
+		graphics::drawText(40, WINDOW_HE/2 + 100, 17.f, "Filter by   Movie  Name ,   Director   or   Actors:", text);
 
 		for (auto gb : genreButtons)
 			gb->draw();
