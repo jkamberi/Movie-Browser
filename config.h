@@ -4,8 +4,6 @@
 #define ASSET_PATH "assets\\"
 #define WINDOW_WI 1600
 #define WINDOW_HE 850
-//#define WINDOW_WI 1600
-//#define WINDOW_HE 850
 #define P_WIDTH 200
 #define P_HEIGHT 300
 #define INIT_POS_X  WINDOW_WI/2-480
