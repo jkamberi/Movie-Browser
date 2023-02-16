@@ -149,14 +149,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="browser.cpp" />
-    <ClCompile Include="gui.cpp" />
+    <ClCompile Include="widget.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="browser.h" />
+    <ClInclude Include="button.h" />
     <ClInclude Include="config.h" />
-    <ClInclude Include="gui.h" />
+    <ClInclude Include="widget.h" />
+    <ClInclude Include="iconButton.h" />
     <ClInclude Include="movie.h" />
+    <ClInclude Include="movieWindow.h" />
+    <ClInclude Include="textField.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,8 @@
-#include "gui.h"
+#include "widget.h"
+#include "button.h"
+#include "iconButton.h"
+#include "movieWindow.h"
+#include "textField.h"
 #include "config.h"
 #include <iostream>
 

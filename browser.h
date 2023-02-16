@@ -1,5 +1,9 @@
 #pragma once
-#include "gui.h"
+#include "widget.h"
+#include "button.h"
+#include "iconButton.h"
+#include "movieWindow.h"
+#include "textField.h"
 #include "movie.h"
 #include <list>
 

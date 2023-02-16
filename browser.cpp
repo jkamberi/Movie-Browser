@@ -1,5 +1,4 @@
 #include "browser.h"
-#include "gui.h"
 #include "graphics.h"
 #include "config.h"
 #include <iostream>
